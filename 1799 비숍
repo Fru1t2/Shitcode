@@ -1,0 +1,42 @@
+// 망한 무지성 백트래킹 코드 --> 다시 짜야징~~!
+import sys
+
+def checking(alist, x, y):
+    for i in range(1, x + 1):
+        if y - i >= 0 and alist[x - i][y - i] == False:
+            return False
+
+    for j in range(1, x + 1):
+        if y + j < len(alist) and alist[x - j][y + j] == False:
+            return False
+    return True
+
+def solution(data, x, y, count, alist):
+    if x == len(data):
+        a = sum(row.count(False) for row in alist)
+        return max(count, a)
+
+    if y == len(data):
+        a = sum(row.count(False) for row in alist)
+        return max(count, a)
+
+    if data[x][y] == 1:
+        if checking(alist, x, y):
+            alist[x][y] = False
+            if y == len(alist) - 1:
+                count = solution(data, x+1, 0, count, alist)
+            else:
+                count = solution(data, x, y + 1, count, alist)
+            alist[x][y] = True
+    if y == len(data) - 1:
+        return solution(data, x+1, 0, count, alist)
+    else:
+        return solution(data, x, y + 1, count, alist)
+
+
+a = int(sys.stdin.readline())
+data = []
+for _ in range(a):
+    data.append(list(map(int, sys.stdin.readline().split())))
+alist = [[True for _ in range(a)] for _ in range(a)]
+print(solution(data, 0, 0, 0, alist))
