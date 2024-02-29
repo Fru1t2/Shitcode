@@ -40,3 +40,64 @@ for _ in range(a):
     data.append(list(map(int, sys.stdin.readline().split())))
 alist = [[True for _ in range(a)] for _ in range(a)]
 print(solution(data, 0, 0, 0, alist))
+
+#두번째 shit code 대체 왜틀렸는진 모르지만 코드 더러워서 다시 짤듯
+import sys
+
+def checking(alist, x, y):
+    for j, k in alist:
+        if abs(x - j) == abs(y - k):
+            return False
+    return True
+
+def backtracking(data, x, y):
+    global output
+    if x == len(data):
+        output.append(len(alist))
+        return output
+
+    if data[x][y] == 1:
+        if checking(alist, x, y):
+            alist.append([x,y])
+            if y + 2 == len(data):
+                backtracking(data, x+1, 0)
+            elif y + 2 > len(data):
+                backtracking(data, x+1, 1)
+            else:
+                backtracking(data, x, y+2)
+            alist.remove([x,y])
+            if y + 2 == len(data):
+                backtracking(data, x+1, 0)
+            elif y + 2 > len(data):
+                backtracking(data, x+1, 1)
+            else:
+                backtracking(data, x, y+2)
+        else:
+            if y + 2 == len(data):
+                backtracking(data, x+1, 0)
+            elif y + 2 > len(data):
+                backtracking(data, x+1, 1)
+            else:
+                backtracking(data, x, y+2)
+    else:
+        if y + 2 == len(data):
+            backtracking(data, x + 1, 0)
+        elif y + 2 > len(data):
+            backtracking(data, x + 1, 1)
+        else:
+            backtracking(data, x, y + 2)
+
+output = []
+alist = []
+data = []
+result = 0
+a = int(sys.stdin.readline())
+for _ in range(a):
+    data.append(list(map(int, sys.stdin.readline().split())))
+backtracking(data, 0, 0)
+result += max(output)
+output = []
+alist = []
+backtracking(data, 0, 1)
+result += max(output)
+print(result)
